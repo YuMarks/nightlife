@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <title>Caffeine Coordinator</title>
+   <link rel="stylesheet" type="text/css" href="../main.css">
+ </head>
+ <body>
+<% if (userID === undefined){ %>
+<ul>
+<li><a href="/auth/github">Log in with Gitub</a></li>
+</ul>
+<% } else { %>
+  Welcome <%= userID %>
+<% } %>
+<form action ='/' method='post'>
+    <input type ="text" name="searchTerm">
+    <input type="submit" value="Search">
+    
+</form>
+<div>
+    
+    <% for (var i = 0; i < itemsArr.length; i++) { %>
+    
+        <div class="indv_Container"><img class="thumbnail" src="<%= itemsArr[i].img %>" ><h4 class=bus_info> <a href="https://www.yelp.com/biz/<%=itemsArr[i].id%>"> <%= itemsArr[i].name %></h4></a>
+        <% if (userID === undefined){ %>
+        <%= itemsArr[i].going %> GOING
+        
+        <% } else { %>
+            <form action = '/' method='post'>
+            <input type="hidden" name="going" value= <%= itemsArr[i].id %> />    
+            <input type="submit" value=<%= itemsArr[i].going %> /> Going
+            <% if(itemsArr[i].userFound === true){ %>
+            <% console.log(itemsArr[i].userFound) %>
+            <span> (you are attending)</span>
+                <% } %>
+                
+            </form>    
+        <% } %>
+        <p><%= itemsArr[i].desc %></p></div>        
+    <% } %>
+</div>
+</body>
+</html>
