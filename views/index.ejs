@@ -5,25 +5,63 @@
    <link rel="stylesheet" type="text/css" href="../main.css">
  </head>
  <body>
-<% if (userID === undefined){ %>
-<ul>
-<li><a href="/auth/github">Log in with Gitub</a></li>
-</ul>
-<% } else { %>
-  Welcome <%= userID %>
-<% } %>
+     <header>
+<div class="one-third">
+    <p id="top-buffer">Buffer text</p>
+</div>         
+
+<div class="one-third">
+<h1>Caffeine Coordinator</h1>
+<h3>Where is everyone starting their morning?</h3>
+
 <form action ='/' method='post'>
     <input type ="text" name="searchTerm">
     <input type="submit" value="Search">
     
 </form>
+</div>
+<div class="one-third">
+<% if (userID === undefined){ %>
+<ul>
+<li>
+    <div class="github-wrapper"><a href="/auth/github"><img src="github_light.png"><h3>Log in with Gitub</h3></a>
+</li>
+</div>
+</ul>
+
+<% } else { %>
+<div class="github-wrapper">
+<h3>Welcome <%= userID %></h3>
+<a href="/logout"><h5>Logout</h5></a>
+<% } %>
+</div>
+</div>
+    </header>
+    
+    <div id="banner">
+        <article id="img-wrapper">
+        <img src="../coffee_time.jpg">
+        </article>
+    </div>
+
+    <% if(searchTerm != undefined){ %>
 <div>
-    
+    <article id="searchTerm-display"> <%= searchTerm %> <%=itemsArr[i].loc %> </div>
+</div>
+    <% } %>
+    <section id="main">
+
     <% for (var i = 0; i < itemsArr.length; i++) { %>
-    
-        <div class="indv_Container"><img class="thumbnail" src="<%= itemsArr[i].img %>" ><h4 class=bus_info> <a href="https://www.yelp.com/biz/<%=itemsArr[i].id%>"> <%= itemsArr[i].name %></h4></a>
+        <div class="inner-wrapper">
+        <article>
+            <img class="thumbnail" src="<%= itemsArr[i].img %>" >
+        </article>
+        
+        <aside>
+            <h4 class=bus_info> <a href="https://www.yelp.com/biz/<%=itemsArr[i].id%>"> <%= itemsArr[i].name %></h4></a>
+        
         <% if (userID === undefined){ %>
-        <%= itemsArr[i].going %> GOING
+        <p class="going"><%= itemsArr[i].going %> GOING </p>
         
         <% } else { %>
             <form action = '/' method='post'>
@@ -38,6 +76,8 @@
         <% } %>
         <p><%= itemsArr[i].desc %></p></div>        
     <% } %>
-</div>
+    </aside>
+    </div>
+</section>
 </body>
 </html>

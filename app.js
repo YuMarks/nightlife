@@ -47,8 +47,9 @@ app.get('/auth/github/callback',
     passport.authenticate('github', { failureRedirect: '/auth/error'}),
     function(req, res){
     if(req.user.profile.id){
-       req.session.username = req.user.profile.username  // User's Git Hub username
+       req.session.username = req.user.profile.username;  // User's Git Hub username
        req.session.userID = req.user.profile.id;        // User's Git Hub id
+       console.log("What is authenticated " + req.user.profile.id);
        
     } else{
         req.session.userID = undefined;
@@ -83,19 +84,20 @@ var yelp = new Yelp({
 
 
 app.get('/', function(req, res){  // get search term and build array based off search
-  req.cookies.cookieName = req.session.searchTerm;
+ console.log("searchterm is " + typeof(searchTerm));
   
+  req.cookies.cookieName = req.session.searchTerm;
   
   var itemsArr = [];
   
   if(req.session.searchTerm){
       
      var searchTerm = req.session.searchTerm;
-     yelp.search({ term: 'coffee', limit: 3, sort: 2, location: searchTerm })
+     yelp.search({ term: 'coffee', limit: 20, sort: 2, loca: searchTerm })
      .then(function (data) {
          
      async.each(data.businesses, function(item, callback){ // iterates over an array of items building array, then moves to callback function once array built
-            
+         
          var tempObj = {}; 
          tempObj.img = item.image_url;
          tempObj.name = item.name;
@@ -103,8 +105,9 @@ app.get('/', function(req, res){  // get search term and build array based off s
          tempObj.id = item.id;
          tempObj.date= item.date;
          tempObj.userFound = false;      // will track if a user is not found in this businesses record
+         tempObj.loc = item.location.city;
          
-         var location = item.id;        
+         var loca = item.id;        // can't use location-- JavaScript keyword
          
          var dateObj = new Date();  // create an object holding todays date
          var month = dateObj.getMonth() + 1;
@@ -113,9 +116,9 @@ app.get('/', function(req, res){  // get search term and build array based off s
          var todayDate = year + "/" + month + "/" + day;
                     
 		
-         //See if anyone is already going to this location today
+         //See if anyone is already going to this loca today
 	//Move this to run first, once database has been checked and tempObj.going is assigned, then build the rest of the object
-         Going.findOne({loc: location, date: todayDate}, function(err, data){
+         Going.findOne({loc: loca, date: todayDate}, function(err, data){
             if(err) throw err;
             if(data){
                 
@@ -150,32 +153,40 @@ app.get('/', function(req, res){  // get search term and build array based off s
                  var locB = b.name.toUpperCase();
                  return (locA < locB) ? -1: (locA >locB) ? 1 : 0;
              });
-             
-              console.log("Checking again for userFound = " + itemsArr[0]);
-              console.log("Checking again for userFound = " + itemsArr[1].name);
-              console.log("Checking again for userFound = " + itemsArr[2].name);
-     
+       
+    
     res.render('index',
-        {userID: req.session.userID,
+        {userID: req.session.username,
+        searchTerm: req.session.searchTerm,
         itemsArr: itemsArr,
-        });  
-         });
+        }); 
+       
+        
+    });
     
      
          
      });
 }
 
-    if(req.session.searchTerm === undefined){
+    else if(req.session.searchTerm === undefined){
     
-    
+    console.log("searchterm is undefined");
    res.render('index',
-        {userID: req.session.userID,
+        {userID: req.session.username,
+        searchTerm: undefined,
         itemsArr: itemsArr,
         }); 
     }
 });
     
+
+app.get('/logout', function (req, res, next){   //Logout the user
+   console.log("logging out...");
+   req.session.destroy();  //deletes current session information
+   
+   res.redirect('/');
+});
 
 app.post('/', function(req, res){
    if(req.body.searchTerm != undefined){
@@ -185,7 +196,7 @@ app.post('/', function(req, res){
        var tempUser = [];
        tempUser.going = req.session.userID;
        tempUser.loc = req.body.going;
-       var location = req.body.going;
+       var loca = req.body.going;
        
          var dateObj = new Date();  // create an object holding todays date in format year/month/day
          var month = dateObj.getMonth() + 1;
@@ -193,7 +204,7 @@ app.post('/', function(req, res){
          var year = dateObj.getFullYear();
          var todayDate = year + "/" + month + "/" + day;
          
-       Going.findOne({loc: location, date: todayDate}, function(err, data){
+       Going.findOne({loc: loca, date: todayDate}, function(err, data){
           if(data){
               
               var userGoing = false; //check if current user is already in db for this business/date
@@ -203,7 +214,7 @@ app.post('/', function(req, res){
                   userGoing = true;
                   var temp = req.session.userID;
                   
-                  Going.findOneAndUpdate({loc: location, date: todayDate}, { $pull: { 'going': temp }}, function (err, data){ // pull removes item from array. works if id is typed in as string
+                  Going.findOneAndUpdate({loc: loca, date: todayDate}, { $pull: { 'going': temp }}, function (err, data){ // pull removes item from array. works if id is typed in as string
                       console.log(err, data);
                   });
                               
