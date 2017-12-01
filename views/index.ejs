@@ -19,6 +19,12 @@
     <input type="submit" value="Search">
     
 </form>
+   
+    <div id="banner">
+        <article id="img-wrapper">
+        <img src="../coffee_time.jpg">
+        </article>
+</div>
 </div>
 <div class="one-third">
 <% if (userID === undefined){ %>
@@ -37,24 +43,18 @@
 </div>
 </div>
     </header>
-    
-    <div id="banner">
-        <article id="img-wrapper">
-        <img src="../coffee_time.jpg">
-        </article>
-</div>
+
 <section id="main">
- <span id="search-term-display">
+    <div>
+ <div id="search-term-display">
     <% if(searchTerm != "undefined"){ %>
         <h2> <%= searchTerm %> </h2>
         <h2></h2>
     <% } else { %>
     <h2>Please enter a city to search.</h2>
     <% } %>
-    </span>
-    
-    
-
+    </div>
+    </div>
     <% for (var i = 0; i < itemsArr.length; i++) { %>
         <div class="inner-wrapper">
         <article>
