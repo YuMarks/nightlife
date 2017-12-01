@@ -15,15 +15,12 @@ var auth = require('./routes/auth.js');
 var dbInfo = process.env.MONGOLAB_URI;
 var mongoose = require('mongoose');
 var oauthSignature = require('oauth-signature'); //authorization standard
-var n = require('nonce')(); // May not need this
 var request = require('request');
 var qs = require('querystring'); // extract these from Express request object (url)  
-//var _ = require('lodash');        // May not need this
 var async = require('async'); // Manages asynchronous operation to complete one action before moving to  next
 var sassMiddleware = require('node-sass-middleware');
 var setUpPassport = require("./setuppassport");
 
-//var routes = require("./routes");
 var Going = require("./models/going");
 
 setUpPassport();
