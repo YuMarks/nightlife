@@ -6,7 +6,7 @@
     "npm": "2.14.x"
   },
   "description": "Morning coffee social coordinator project.",
-  "main": "server.js",
+  "main": "app.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/YuMarks/nightlife/commits/master/app.js"
@@ -22,7 +22,7 @@
     "javascript"
   ],
   "scripts": {
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "author": "A Neal",
   "license": "MIT",
