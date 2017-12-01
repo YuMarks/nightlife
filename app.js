@@ -84,18 +84,18 @@ var yelp = new Yelp({
 
 
 app.get('/', function(req, res){  // get search term and build array based off search
- console.log("searchterm is " + typeof(searchTerm));
+ console.log("the search term is " + req.session.searchTerm);
   
   req.cookies.cookieName = req.session.searchTerm;
   
   var itemsArr = [];
-  
+ 
   if(req.session.searchTerm){
       
      var searchTerm = req.session.searchTerm;
-     yelp.search({ term: 'coffee', limit: 20, sort: 2, loca: searchTerm })
+     yelp.search({ term: 'coffee', limit: 20, sort: 2, location: searchTerm })
      .then(function (data) {
-         
+         console.log("Made it to api");
      async.each(data.businesses, function(item, callback){ // iterates over an array of items building array, then moves to callback function once array built
          
          var tempObj = {}; 
@@ -105,10 +105,10 @@ app.get('/', function(req, res){  // get search term and build array based off s
          tempObj.id = item.id;
          tempObj.date= item.date;
          tempObj.userFound = false;      // will track if a user is not found in this businesses record
-         tempObj.loc = item.location.city;
+         //tempObj.loc = item.location.city;
          
          var loca = item.id;        // can't use location-- JavaScript keyword
-         
+         console.log("loca: " + loca);
          var dateObj = new Date();  // create an object holding todays date
          var month = dateObj.getMonth() + 1;
          var day = dateObj.getDate();
@@ -169,13 +169,13 @@ app.get('/', function(req, res){  // get search term and build array based off s
      });
 }
 
-    else if(req.session.searchTerm === undefined){
+    else{
     
-    console.log("searchterm is undefined");
+    console.log("searchterm is undefined sending null");
    res.render('index',
         {userID: req.session.username,
-        searchTerm: undefined,
-        itemsArr: itemsArr,
+        searchTerm: "undefined",
+        itemsArr: [],
         }); 
     }
 });

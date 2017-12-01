@@ -42,14 +42,18 @@
         <article id="img-wrapper">
         <img src="../coffee_time.jpg">
         </article>
-    </div>
-
-    <% if(searchTerm != undefined){ %>
-<div>
-    <article id="searchTerm-display"> <%= searchTerm %> <%=itemsArr[i].loc %> </div>
 </div>
+<section id="main">
+ <span id="search-term-display">
+    <% if(searchTerm != "undefined"){ %>
+        <h2> <%= searchTerm %> </h2>
+        <h2></h2>
+    <% } else { %>
+    <h2>Please enter a city to search.</h2>
     <% } %>
-    <section id="main">
+    </span>
+    
+    
 
     <% for (var i = 0; i < itemsArr.length; i++) { %>
         <div class="inner-wrapper">
