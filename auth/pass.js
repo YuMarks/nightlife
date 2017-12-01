@@ -32,7 +32,7 @@ app.use(passport.session());
 passport.use(new GithubStrategy({
     clientID: clientID,
     clientSecret: clientSecret,
-    callbackURL: 'https://nightlife-ymarks.c9users.io/auth/github/callback'
+    callbackURL: 'https://hidden-bastion-35960.herokuapp.com/auth/github/callback'
 }, function(accessToken, refreshToken, profile, done){
   done(null, {
     accessToken: accessToken,
