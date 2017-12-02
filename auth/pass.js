@@ -16,7 +16,8 @@ passport.use(new GithubStrategy({ //authenticate using GitHub
   clientID: clientID,
   clientSecret: clientSecret,
   //callbackURL: 'https://nightlife-ymarks.c9users.io/auth/github/callback'
-  callbackURL: 'https://hidden-bastion-35960.herokuapp.com/auth/github/callback'
+  callbackURL: 'https://hidden-bastion-35960.herokuapp.com/auth/github/callback',
+  redirect_uri: 'https://hidden-bastion-35960.herokuapp.com/auth/github/callback',
 }, function(accessToken, refreshToken, profile, done){
   done(null, {
     accessToken: accessToken,
