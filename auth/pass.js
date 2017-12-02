@@ -15,7 +15,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.get('/auth/github', passport.authenticate('github'));
-app.get('/auth/github/callback',
+app.get('/auth/github',
     passport.authenticate('github', { failureRedirect: '/login'}),
     function(req, res){
         if(req.user.profile.id){
